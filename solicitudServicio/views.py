@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
-from solicitudServicio.dao import ServicioDAO, PedidoDAO
+from solicitudServicio.dao.dao import ServicioDAO, PedidoDAO
 from solicitudServicio.serializers import ServicioSerializer, PedidoSerializer
 
 # ==========================================
