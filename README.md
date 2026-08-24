@@ -4,20 +4,20 @@ Aplicación web para gestión de servicios de limpieza del hogar.
 REST API desarrollada con Python, Django.
 Para Gestionar Clientes, Servicios, Solicitudes.
 
-##Tecnologías
+## Tecnologías
 - Python
 - MVC
 - DAO/ORM
 - Django
 - GIT
 
-##Funcionalidades
+## Funcionalidades
 - Registro de clientes
 - Gestión de servicios
 - Consulta de información
 - Actualización y eliminación de registros
 
-##Arquitectura
+## Arquitectura
 Controller
     ↓
 Service
@@ -26,5 +26,5 @@ Repository
     ↓
 Database
 
-##Autor
+## Autor
 José Martín Rojas Galicia
