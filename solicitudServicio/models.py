@@ -32,6 +32,7 @@ class Servicio(models.Model):
         ('RECHAZADO', 'Rechazado'),
         ('EN PROCESO', 'En proceso'),
         ('TERMINADO', 'Terminado'),
+        ('PENDIENTE', 'Pendiente')
     ]
     SERVICIO = [
         ('CASA', 'Casa'),

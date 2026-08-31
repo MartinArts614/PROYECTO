@@ -40,7 +40,7 @@ def cambiar_estado_action(request, pedido_id):
 # 2. VISTAS API REST (JSON)
 # ==========================================
 
-class ProductoViewSet(viewsets.ViewSet):
+class ServicioViewSet(viewsets.ViewSet):
     def list(self, request):
         servicios = ServicioDAO.obtener_todos()
         serializer = ServicioSerializer(servicios, many=True)
