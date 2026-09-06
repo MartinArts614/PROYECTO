@@ -6,7 +6,15 @@ class PedidoDAO:
     
     @staticmethod
     def obtener_todos() -> List[Pedido]:
-        return Pedido.objects.all().order_by('-fecha')
+        #return Pedido.objects.all().order_by('-fecha')
+        return Pedido.objects.select_related('servicio').all().order_by('-fecha')
+
+    @staticmethod
+    def obtener_pendientes_o_en_proceso() -> List[Pedido]:
+        # NUEVO MÉTODO: Trae solo comandas activas para el panel de cocina
+        return Pedido.objects.select_related('servicio').filter(
+            estado__in=['PENDIENTE', 'EN PROCESO']
+        ).order_by('fecha')
 
     @staticmethod
     def obtener_disponibles() -> List[Pedido]:

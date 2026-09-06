@@ -1,47 +1,45 @@
 from django.test import TestCase
-from django.test import TestCase
-from django.contrib.auth.models import User
-from .models import Servicio, Pedido
+from django.urls import reverse
+from solicitudServicio.models import Servicio, Pedido
+from solicitudServicio.dao.dao import ServicioDAO, PedidoDAO
 
-class SmokeTests(TestCase):
+
+class HogarLimpioTestCase(TestCase):
     def setUp(self):
-        """Configuración de datos iniciales para la prueba"""
         self.servicio = Servicio.objects.create(
             nombre="Servicio primera vez",
-            precio=250.00,
+            precio=500.00,
             categoria="COMPLETO",
             disponible=True
         )
-        self.user = User.objects.create_superuser(
-            username='admin_test',
-            email='admin@test.com',
-            password='password123'
-        )
 
-    def test_creacion_servicio(self):
-        """Verifica que el producto se guarde correctamente en la base de datos"""
-        self.assertEqual(Servicio.objects.count(), 1)
-        self.assertEqual(self.servicio.nombre, "Servicio primera vez")
-        self.assertEqual(self.servicio.precio, 250.00)
-        self.assertEqual(self.servicio.categoria, "COMPLETO")
-        self.assertTrue(self.servicio.disponible)
-
-    def test_creacion_pedido(self):
-        """Verifica la creación de un pedido asociado a un cliente y producto"""
-        pedido = Pedido.objects.create(
-            cliente_nombre="Juana de Arco",
-            servicio=self.servicio,
-            estado="PENDIENTE",
-            total=250.00
-        )
-        self.assertEqual(Pedido.objects.count(), 1)
-        self.assertEqual(pedido.cliente_nombre, "Juana de Arco")
+    def test_crear_pedido(self):
+        pedido = PedidoDAO.crear_pedido_con_servicio("Alfonso", self.servicio.id)
+        self.assertIsNotNone(pedido)
+        self.assertEqual(pedido.cliente_nombre, "Alfonso")
+        self.assertEqual(pedido.total, 500.00)
         self.assertEqual(pedido.servicio, self.servicio)
-        self.assertEqual(pedido.estado, "PENDIENTE")
-        self.assertEqual(pedido.total, 250.00)
 
-    def test_acceso_admin_importar_csv(self):
-        """Verifica que la vista del cargue masivo responda correctamente (HTTP 200)"""
-        self.client.login(username='admin_test', password='password123')
-        response = self.client.get('/admin/solicitudServicio/servicio/importar-csv/')
+    def test_cambiar_estado_dao(self):
+        pedido = PedidoDAO.crear_pedido_con_servicio("Ana", self.servicio.id)
+        self.assertIsNotNone(pedido)
+        pedido_actualizado = PedidoDAO.cambiar_estado(pedido.id, "EN PROCESO")
+        self.assertIsNotNone(pedido_actualizado)
+        self.assertEqual(pedido_actualizado.estado, "EN PROCESO")
+
+## para probar los endpoint rest, verifica que la api nos responda 
+    def test_api_list_servicios(self):
+        response = self.client.get('/api/productos/')
         self.assertEqual(response.status_code, 200)
+
+    def test_crear_pedido_action_web(self):
+        response = self.client.post(reverse('crear_pedido'), {
+            'cliente_nombre': 'Antonio',
+            'servicio_id': self.servicio.id
+        })
+        self.assertRedirects(response, reverse('menu'))
+        self.assertEqual(Pedido.objects.count(), 1)
+        pedido = Pedido.objects.first()
+        self.assertEqual( pedido.cliente_nombre, 'Antonio' )
+        self.assertEqual( pedido.servicio, self.servicio )
+        self.assertEqual( pedido.total, 500.00 )
