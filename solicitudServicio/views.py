@@ -5,6 +5,13 @@ from rest_framework.response import Response
 
 from solicitudServicio.dao.dao import ServicioDAO, PedidoDAO
 from solicitudServicio.serializers import ServicioSerializer, PedidoSerializer
+from django.contrib.auth.decorators import login_required, user_passes_test
+# ==========================================
+# Roles
+# ==========================================
+def es_pedidos(user):
+    """Verifica si el usuario autenticado pertenece al grupo 'Pedidos' o es Staff/Admin"""
+    return user.is_authenticated and (user.groups.filter(name='pedidos').exists() or user.is_staff)
 
 # ==========================================
 # 1. VISTAS WEB (HTML)
@@ -29,13 +36,14 @@ def crear_pedido_action(request):
         PedidoDAO.crear_pedido_con_servicio(cliente_nombre, int(servicio_id))
     return redirect('pedidos')
 
+@login_required
+@user_passes_test(es_pedidos, login_url='/admin/login/')
 def cambiar_estado_action(request, pedido_id):
     """Actualiza el estado del servicio vista web"""
     if request.method == 'POST':
         nuevo_estado = request.POST.get('nuevo_estado')
         PedidoDAO.cambiar_estado(pedido_id, nuevo_estado)
     return redirect('pedidos')
-
 
 # ==========================================
 # 2. VISTAS API REST (JSON)

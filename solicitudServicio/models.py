@@ -35,6 +35,7 @@ class Pedido(models.Model):
     ]
     
     cliente_nombre = models.CharField(max_length=100)
+    #Relación Servicio con pedidos uno es a muchos
     servicio = models.ForeignKey(Servicio, on_delete=models.PROTECT, related_name='pedidos')
     fecha = models.DateTimeField(auto_now_add=True)
     estado = models.CharField(max_length=15, choices=ESTADOS, default='PENDIENTE')

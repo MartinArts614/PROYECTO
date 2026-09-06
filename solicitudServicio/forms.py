@@ -5,12 +5,13 @@ from django.core.exceptions import ValidationError
 class PedidoModelForm(forms.ModelForm):
     class Meta:
         model = Pedido
-        fields = ['nombre', 'precio', 'categoria', 'disponible']
+        fields = ['nombre', 'precio', 'categoria', 'disponible', 'imagen']
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'precio': forms.NumberInput(attrs={'class': 'form-control'}),
             'categoria': forms.Select(attrs={'class': 'form-select'}),
             'disponible': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'imagen': forms.FileField(attrs={'class': 'form-control'}),
 
         }
 
@@ -29,6 +30,6 @@ class PedidoModelForm(forms.ModelForm):
         precio = cleaned_data.get('precio')
 
         # Regla de negocio cruzada entre dos campos
-        #if categoria == 'POSTRE' and precio and precio > 500:
-         #   raise ValidationError("Un postre no puede costar más de $500 MXN.")
+        if categoria == 'EXPRESS' and precio and precio > 500:
+            raise ValidationError("Un postre no puede costar más de $500 MXN.")
         return cleaned_data
