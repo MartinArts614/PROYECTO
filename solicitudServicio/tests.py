@@ -43,3 +43,4 @@ class HogarLimpioTestCase(TestCase):
         self.assertEqual( pedido.cliente_nombre, 'Antonio' )
         self.assertEqual( pedido.servicio, self.servicio )
         self.assertEqual( pedido.total, 500.00 )
+
