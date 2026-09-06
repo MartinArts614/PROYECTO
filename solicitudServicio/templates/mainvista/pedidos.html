@@ -20,11 +20,14 @@
                 <td><strong>#{{ pedido.id }}</strong></td>
                 <td>{{ pedido.cliente_nombre }}</td>
                 <td>
-                    <span class="badge 
-                        {% if pedido.estado == 'PENDIENTE' %}bg-warning text-dark
-                        {% elif pedido.estado == 'EN_PREPARACION' %}bg-info text-dark
-                        {% elif pedido.estado == 'LISTO' %}bg-primary
-                        {% else %}bg-success{% endif %}">
+                    <span class="badge
+                        {% if pedido.estado == 'PENDIENTE' %} bg-warning text-dark
+                        {% elif pedido.estado == 'ACEPTADO' %} bg-info text-dark
+                        {% elif pedido.estado == 'RECHAZADO' %} bg-danger
+                        {% elif pedido.estado == 'EN PROCESO' %} bg-primary
+                        {% elif pedido.estado == 'TERMINADO' %} bg-success
+                        {% elif pedido.estado == 'CANCELADO' %} bg-secondary
+                        {% endif %}">
                         {{ pedido.get_estado_display }}
                     </span>
                 </td>
@@ -34,9 +37,11 @@
                         {% csrf_token %}
                         <select name="nuevo_estado" onchange="this.form.submit()" class="form-select form-select-sm d-inline-block w-auto">
                             <option value="PENDIENTE" {% if pedido.estado == 'PENDIENTE' %}selected{% endif %}>Pendiente</option>
-                            <option value="EN_PREPARACION" {% if pedido.estado == 'EN_PREPARACION' %}selected{% endif %}>En Preparación</option>
-                            <option value="LISTO" {% if pedido.estado == 'LISTO' %}selected{% endif %}>Listo</option>
-                            <option value="ENTREGADO" {% if pedido.estado == 'ENTREGADO' %}selected{% endif %}>Entregado</option>
+                            <option value="ACEPTADO" {% if pedido.estado == 'ACEPTADO' %}selected{% endif %}>Aceptado</option>
+                            <option value="RECHAZADO" {% if pedido.estado == 'RECHAZADO' %}selected{% endif %}>Rechazado</option>
+                            <option value="EN PROCESO" {% if pedido.estado == 'EN PROCESO' %}selected{% endif %}>En proceso</option>
+                            <option value="TERMINADO" {% if pedido.estado == 'TERMINADO' %}selected{% endif %}>Terminado</option>
+                            <option value="CANCELADO" {% if pedido.estado == 'CANCELADO' %}selected{% endif %}>Cancelado</option>
                         </select>
                     </form>
                 </td>

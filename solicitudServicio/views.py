@@ -24,8 +24,9 @@ def crear_pedido_action(request):
     """Procesa el formulario web de un nuevo pedido"""
     if request.method == 'POST':
         cliente_nombre = request.POST.get('cliente_nombre')
-        producto_id = request.POST.get('producto_id')
-        PedidoDAO.crear_pedido_con_producto(cliente_nombre, producto_id)
+        servicio_id = request.POST.get('servicio_id')
+        #if cliente_nombre and servicio_id:
+        PedidoDAO.crear_pedido_con_servicio(cliente_nombre, int(servicio_id))
     return redirect('pedidos')
 
 def cambiar_estado_action(request, pedido_id):

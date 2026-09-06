@@ -1,21 +1,29 @@
 {% extends 'mainvista/base.html' %}
 
 {% block content %}
-<h2 class="mb-4">🏠 Menú de servicios</h2>
+<h2 class="mb-4">🏠 Servicios</h2>
 
 <div class="row">
-    {% for producto in productos %}
+    {% for servicio in servicios %}
     <div class="col-md-4 mb-3">
         <div class="card h-100 shadow-sm">
+            {% if servicio.imagen %}
+                <img src="{{ servicio.imagen.url }}" class="card-img-top" alt="{{ servicio.nombre }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+                <div class="bg-light text-center py-5 border-bottom">
+                    <span class="text-muted">Sin imagen</span>
+                </div>
+            {% endif %}
+
             <div class="card-body">
-                <h5 class="card-title">{{ producto.nombre }}</h5>
-                <p class="card-text text-muted">Categoría: {{ producto.get_categoria_display }}</p>
-                <h6 class="text-success">${{ producto.precio }}</h6>
+                <h5 class="card-title">{{ servicio.nombre }}</h5>
+                <p class="card-text text-muted">Categoría: {{ servicio.get_categoria_display }}</p>
+                <h6 class="text-success">${{ servicio.precio }}</h6>
             </div>
             <div class="card-footer bg-white border-top-0">
                 <form action="{% url 'crear_pedido' %}" method="POST">
                     {% csrf_token %}
-                    <input type="hidden" name="producto_id" value="{{ producto.id }}">
+                    <input type="hidden" name="servicio_id" value="{{ servicio.id }}">
                     <div class="input-group mb-2">
                         <input type="text" name="cliente_nombre" class="form-control" placeholder="Tu nombre" required>
                         <button type="submit" class="btn btn-primary">Ordenar</button>
@@ -25,7 +33,7 @@
         </div>
     </div>
     {% empty %}
-    <p>No hay productos registrados en el menú.</p>
+    <p>No hay servicios registrados.</p>
     {% endfor %}
 </div>
 {% endblock %}
