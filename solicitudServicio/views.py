@@ -35,48 +35,21 @@ def crear_pedido_action(request):
     """Procesa el formulario web de un nuevo pedido."""
 
     if request.method == 'POST':
-        cliente_nombre = request.POST.get(
-            'cliente_nombre',
-            ''
-        ).strip()
-
+        cliente_nombre = request.POST.get('cliente_nombre','').strip()
         servicio_id = request.POST.get('servicio_id')
-
         if cliente_nombre and servicio_id:
-
             try:
                 servicio_id = int(servicio_id)
-
-                pedido = PedidoDAO.crear_pedido_con_servicio(
-                    cliente_nombre,
-                    servicio_id
-                )
-
+                pedido = PedidoDAO.crear_pedido_con_servicio(cliente_nombre,servicio_id)
                 if pedido:
-                    messages.success(
-                        request,
-                        f"¡Pedido registrado a nombre de {cliente_nombre}!"
-                    )
+                    messages.success(request,f"¡Pedido registrado a nombre de {cliente_nombre}!")
                 else:
-                    messages.error(
-                        request,
-                        "El servicio no existe o no está disponible."
-                    )
-
+                    messages.error(request,"El servicio no existe o no está disponible.")
             except (ValueError, TypeError):
-                messages.error(
-                    request,
-                    "El servicio seleccionado no es válido."
-                )
-
+                messages.error(request,"El servicio seleccionado no es válido.")
         else:
-            messages.error(
-                request,
-                "Por favor ingresa tu nombre y selecciona un servicio."
-            )
-
+            messages.error(request,"Por favor ingresa tu nombre y selecciona un servicio.")
     return redirect('menu')
-
 
 @login_required
 @user_passes_test(es_pedidos, login_url='/admin/login/')
