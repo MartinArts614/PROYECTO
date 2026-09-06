@@ -9,13 +9,13 @@ def validar_precio_positivo(value):
     
 class Pedido(models.Model):
     CATEGORIAS = [
-        ('COMPLETA', 'Completa'),
+        ('COMPLETO', 'Completo'),
         ('EXPRESS', 'Express'),
         ('EXTERIORES', 'Exteriores'),
     ]
     nombre = models.CharField(max_length=100)
     precio = models.DecimalField(max_digits=6, decimal_places=2)
-    categoria = models.CharField(max_length=10, choices=CATEGORIAS)
+    categoria = models.CharField(max_length=15, choices=CATEGORIAS, default= 'CASA')
     disponible = models.BooleanField(default=True)
 
 # Soporte para archivos multimedia (Media Files)
@@ -26,23 +26,18 @@ class Pedido(models.Model):
 
 class Servicio(models.Model):
     ESTADOS = [
-        ('ACTIVO', 'Activo'),
-        ('CANCELADO', 'Cancelado'),
+        ('PENDIENTE', 'Pendiente'),
         ('ACEPTADO', 'Aceptado'),
         ('RECHAZADO', 'Rechazado'),
         ('EN PROCESO', 'En proceso'),
         ('TERMINADO', 'Terminado'),
-        ('PENDIENTE', 'Pendiente')
+        ('CANCELADO', 'Cancelado'),        
     ]
-    SERVICIO = [
-        ('CASA', 'Casa'),
-        ('DEPARTAMENTO', 'Departamento'),
-        ('OFICINA', 'Oficina'),
-    ]
+    
     cliente_nombre = models.CharField(max_length=100)
     fecha = models.DateTimeField(auto_now_add=True)
-    servicio = models.CharField(max_length=15, choices=SERVICIO, default='PENDIENTE')
     estado = models.CharField(max_length=15, choices=ESTADOS, default='PENDIENTE')
+    disponible = models.BooleanField(default=True)
     total = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
 
     def __str__(self):

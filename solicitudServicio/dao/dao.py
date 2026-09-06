@@ -28,14 +28,17 @@ class ServicioDAO:
         return Servicio.objects.all().order_by('-fecha')
 
     @staticmethod
+    def obtener_disponibles() -> List[Servicio]:
+        return Servicio.objects.filter(disponible=True).order_by('-fecha')
+    
+    @staticmethod
     def crear_pedido_con_servicio(cliente_nombre: str, pedido_id: int,
                                    servicio: str, categoria: str) -> Optional[Servicio]:
         pedido = PedidoDAO.obtener_por_id(pedido_id)
         if pedido:
             return Servicio.objects.create(
                 cliente_nombre=cliente_nombre,
-                servico = servicio,
-                categoria = categoria,
+                servicio = servicio,
                 total=pedido.precio
             )
         return None
